@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Interactive Optics Masterclass</title>
+    <!-- KaTeX for crisp LaTeX mathematical formula rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-yellow: #facc15;
+            --accent-green: #4ade80;
+            --accent-red: #f87171;
+            --accent-purple: #c084fc;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e1b4b, #311b92);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        nav.toc {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0 40px 0;
+        }
+
+        nav.toc h2 {
+            font-size: 1.3rem;
+            color: var(--accent-yellow);
+            margin-bottom: 15px;
+        }
+
+        nav.toc ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 10px;
+            list-style: none;
+        }
+
+        nav.toc a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        nav.toc a:hover {
+            color: var(--accent-yellow);
+            text-decoration: underline;
+        }
+
+        .topic-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .topic-title {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .interactive-box {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        @media (min-width: 900px) {
+            .interactive-box {
+                grid-template-columns: 1fr 320px;
+            }
+        }
+
+        canvas {
+            background: #030712;
+            border-radius: 8px;
+            border: 1px solid #1e293b;
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            background: #111827;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-blue);
+            cursor: pointer;
+        }
+
+        .readout {
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: monospace;
+            color: var(--accent-green);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .card h4 {
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--accent-blue);
+        }
+
+        tr:nth-child(even) {
+            background-color: #162032;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-blue);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+
+        .formula-box {
+            background: #0d1527;
+            border: 1px dashed var(--accent-purple);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        button {
+            background: var(--accent-blue);
+            color: #000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Comprehensive Optics Masterclass</h1>
+    <p>Complete Theory, Mathematical Derivations, Practical Experiments, and Interactive Animations</p>
+</header>
+
+<div class="container">
+
+    <!-- TABLE OF CONTENTS -->
+    <nav class="toc">
+        <h2>Module Navigation</h2>
+        <ul>
+            <li><a href="#reflection">1. Reflection & Laws of Reflection</a></li>
+            <li><a href="#specular-diffused">2. Specular vs. Diffused Reflection</a></li>
+            <li><a href="#refraction">3. Refraction & Speed of Light</a></li>
+            <li><a href="#refractive-index">4. Refractive Index & Snell's Law</a></li>
+            <li><a href="#slab-experiment">5. Experiment: Glass Slab Refraction</a></li>
+            <li><a href="#tir">6. Critical Angle & Total Internal Reflection</a></li>
+            <li><a href="#fiber">7. Optical Fiber Physics & Architecture</a></li>
+            <li><a href="#thin-lenses">8. Thin Lenses & Ray Diagram Dynamics</a></li>
+            <li><a href="#lens-positions">9. Complete Convex Lens Case Analysis</a></li>
+            <li><a href="#magnification">10. Magnification & Lens Numericals</a></li>
+            <li><a href="#applications">11. Magnifying Glass & Real vs. Virtual</a></li>
+            <li><a href="#defects">12. Visible Spectrum & Eye Vision Defects</a></li>
+        </ul>
+    </nav>
+
+    <!-- SECTION 1 -->
+    <section id="reflection" class="topic-section">
+        <h2 class="topic-title">1. Reflection of Light & Laws of Reflection</h2>
+        <p><strong>Reflection</strong> is the phenomenon where incident light rays strike a boundary interface and bounce back into the same medium from which they originated.</p>
+        
+        <div class="highlight-box">
+            <h4>Laws of Reflection:</h4>
+            <ol>
+                <li><strong>First Law:</strong> The angle of incidence ($\theta_i$) is strictly equal to the angle of reflection ($\theta_r$). $$\theta_i = \theta_r$$</li>
+                <li><strong>Second Law:</strong> The incident ray, the reflected ray, and the normal at the point of incidence all lie within the exact same geometric plane.</li>
+            </ol>
+        </div>
+
+        <div class="interactive-box">
+            <canvas id="canvasReflection" width="600" height="350"></canvas>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Angle of Incidence ($\theta_i$): <span id="valIncidence">45</span>°</label>
+                    <input type="range" id="sliderIncidence" min="0" max="85" value="45">
+                </div>
+                <div class="readout" id="readoutReflection">
+                    Angle of Incidence: 45°<br>
+                    Angle of Reflection: 45°
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section id="specular-diffused" class="topic-section">
+        <h2 class="topic-title">2. Regular (Specular) vs. Diffused (Irregular) Reflection</h2>
+        <p>Depending on the microscopic surface topography, reflection is categorized into two distinct behaviors:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Regular / Specular Reflection</th>
+                    <th>Diffused / Irregular Reflection</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Surface Topography</strong></td>
+                    <td>Smooth, polished surface (e.g., plane mirror, calm water).</td>
+                    <td>Rough, uneven, or unpolished surface (e.g., paper, wall, wood).</td>
+                </tr>
+                <tr>
+                    <td><strong>Reflected Ray Direction</strong></td>
+                    <td>Parallel incident rays remain parallel after reflection.</td>
+                    <td>Parallel incident rays scatter in random, multiple directions.</td>
+                </tr>
+                <tr>
+                    <td><strong>Image Formation</strong></td>
+                    <td>Forms crisp, distinct images.</td>
+                    <td>No image formed; illuminates the surrounding environment.</td>
+                </tr>
+                <tr>
+                    <td><strong>Validity of Laws</strong></td>
+                    <td>Laws of reflection hold true across the entire macro surface.</td>
+                    <td>Laws hold true at every microscopic point, but microscopic surface normals vary randomly.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="interactive-box">
+            <canvas id="canvasSpecularDiffused" width="600" height="300"></canvas>
+            <div class="controls">
+                <button id="btnToggleSurface">Toggle Surface: Regular / Diffused</button>
+                <div class="readout" id="readoutSurface">
+                    Current Mode: Regular (Specular) Surface
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3 & 4 -->
+    <section id="refraction" class="topic-section">
+        <h2 class="topic-title">3 & 4. Refraction of Light, Speed, & Snell's Law</h2>
+        <p><strong>Refraction</strong> is the bending of light at an interface when passing obliquely from one transparent medium to another due to a change in its phase velocity.</p>
+
+        <div class="formula-box">
+            <strong>Snell's Law:</strong><br>
+            $$\frac{\sin(\theta_1)}{\sin(\theta_2)} = \frac{v_1}{v_2} = \frac{n_2}{n_1}$$
+            <strong>Absolute Refractive Index ($n$):</strong><br>
+            $$n = \frac{c}{v}$$
+        </div>
+
+        <div class="interactive-box">
+            <canvas id="canvasRefraction" width="600" height="350"></canvas>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Incident Angle ($\theta_1$): <span id="valRefractAngle">45</span>°</label>
+                    <input type="range" id="sliderRefractAngle" min="0" max="85" value="45">
+                </div>
+                <div class="control-group">
+                    <label>Medium 1 Index ($n_1$): <span id="valN1">1.00</span></label>
+                    <input type="range" id="sliderN1" min="1.00" max="2.50" step="0.05" value="1.00">
+                </div>
+                <div class="control-group">
+                    <label>Medium 2 Index ($n_2$): <span id="valN2">1.50</span></label>
+                    <input type="range" id="sliderN2" min="1.00" max="2.50" step="0.05" value="1.50">
+                </div>
+                <div class="readout" id="readoutRefraction">
+                    Refracted Angle ($\theta_2$): --°
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section id="slab-experiment" class="topic-section">
+        <h2 class="topic-title">5. Practical Experiment: Refraction Through Glass Slab</h2>
+        <p>When light passes through a parallel-sided rectangular glass slab, it undergoes refraction twice. The emergent ray is laterally shifted (displaced) relative to the original incident path, but remains parallel to it ($\theta_i = \theta_e$).</p>
+        
+        <div class="formula-box">
+            <strong>Lateral Displacement Formula ($d$):</strong><br>
+            $$d = \frac{t \cdot \sin(\theta_i - \theta_r)}{\cos(\theta_r)}$$
+        </div>
+
+        <div class="interactive-box">
+            <canvas id="canvasSlab" width="600" height="350"></canvas>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Angle of Incidence ($\theta_i$): <span id="valSlabAngle">50</span>°</label>
+                    <input type="range" id="sliderSlabAngle" min="0" max="75" value="50">
+                </div>
+                <div class="control-group">
+                    <label>Slab Thickness ($t$): <span id="valSlabThickness">120</span> px</label>
+                    <input type="range" id="sliderSlabThickness" min="80" max="180" value="120">
+                </div>
+                <div class="readout" id="readoutSlab">
+                    Lateral Shift ($d$): -- px
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6 & 7 -->
+    <section id="tir" class="topic-section">
+        <h2 class="topic-title">6 & 7. Total Internal Reflection (TIR) & Optical Fibers</h2>
+        <p>When light travels from an optically denser medium to a rarer medium, if the incident angle exceeds the <strong>Critical Angle ($\theta_c$)</strong>, the ray cannot refract and undergoes 100% internal reflection.</p>
+        
+        <div class="formula-box">
+            <strong>Critical Angle Formula:</strong><br>
+            $$\sin(\theta_c) = \frac{n_{\text{rarer}}}{n_{\text{denser}}} \implies \theta_c = \arcsin\left(\frac{n_2}{n_1}\right)$$
+        </div>
+
+        <div class="interactive-box">
+            <canvas id="canvasTIR" width="600" height="350"></canvas>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Incident Angle ($\theta_i$): <span id="valTIRAngle">45</span>°</label>
+                    <input type="range" id="sliderTIRAngle" min="10" max="80" value="45">
+                </div>
+                <div class="readout" id="readoutTIR">
+                    Critical Angle ($\theta_c$): --°
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color:var(--accent-yellow); margin-top:30px; margin-bottom:10px;">Optical Fiber Transmission Architecture</h3>
+        <p>An optical fiber consists of a high-index core ($n_1$) encased in a lower-index cladding ($n_2$). Light launched into the core hits the cladding boundary at $\theta > \theta_c$, propagating indefinitely via repeated TIR with near-zero signal loss.</p>
+        
+        <div class="interactive-box">
+            <canvas id="canvasFiber" width="600" height="200"></canvas>
+            <div class="controls">
+                <div class="readout">
+                    Core Index ($n_1$): 1.50<br>
+                    Cladding Index ($n_2$): 1.40<br>
+                    Continuous Total Internal Reflection Simulated
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8 & 9 -->
+    <section id="thin-lenses" class="topic-section">
+        <h2 class="topic-title">8 & 9. Thin Lenses, Parameters, and Complete Case Ray Tracing</h2>
+        <p>Explore object placement dynamically along the principal axis of a convex lens to inspect real-time image creation, virtual transitions, focal points ($F_1, F_2$), and centers of curvature ($2F_1, 2F_2$).</p>
+
+        <div class="interactive-box">
+            <canvas id="canvasLens" width="600" height="400"></canvas>
+            <div class="controls">
+                <div class="control-group">
+                    <label>Object Distance ($u$): <span id="valObjDist">-200</span> mm</label>
+                    <input type="range" id="sliderObjDist" min="-350" max="-30" value="-200">
+                </div>
+                <div class="control-group">
+                    <label>Focal Length ($f$): <span id="valFocal">80</span> mm</label>
+                    <input type="range" id="sliderFocal" min="40" max="120" value="80">
+                </div>
+                <div class="readout" id="readoutLens">
+                    Image Distance ($v$): -- mm<br>
+                    Magnification ($m$): --<br>
+                    Nature: --
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color:var(--accent-yellow); margin-top:20px;">Summary of Convex Lens Image Formation Cases</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Object Position</th>
+                    <th>Image Position</th>
+                    <th>Nature</th>
+                    <th>Relative Size</th>
+                    <th>Magnification ($m$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>At Infinity</td>
+                    <td>At Focus ($F_2$)</td>
+                    <td>Real & Inverted</td>
+                    <td>Highly Diminished (Point-sized)</td>
+                    <td>$m \ll -1$</td>
+                </tr>
+                <tr>
+                    <td>Beyond $2F_1$</td>
+                    <td>Between $F_2$ and $2F_2$</td>
+                    <td>Real & Inverted</td>
+                    <td>Diminished</td>
+                    <td>$-1 < m < 0$</td>
+                </tr>
+                <tr>
+                    <td>At $2F_1$</td>
+                    <td>At $2F_2$</td>
+                    <td>Real & Inverted</td>
+                    <td>Same Size</td>
+                    <td>$m = -1$</td>
+                </tr>
+                <tr>
+                    <td>Between $F_1$ and $2F_1$</td>
+                    <td>Beyond $2F_2$</td>
+                    <td>Real & Inverted</td>
+                    <td>Enlarged</td>
+                    <td>$m < -1$</td>
+                </tr>
+                <tr>
+                    <td>At Focus ($F_1$)</td>
+                    <td>At Infinity</td>
+                    <td>Real & Inverted</td>
+                    <td>Infinitely Enlarged</td>
+                    <td>$m \rightarrow -\infty$</td>
+                </tr>
+                <tr>
+                    <td>Between $F_1$ and Lens ($O$)</td>
+                    <td>Same side as object</td>
+                    <td>Virtual & Erect</td>
+                    <td>Magnified</td>
+                    <td>$m > +1$</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- SECTION 10 & 11 -->
+    <section id="magnification" class="topic-section">
+        <h2 class="topic-title">10 & 11. Lens Formulas, Magnifying Glass, and Image Types</h2>
+        
+        <div class="grid-2">
+            <div class="card">
+                <h4>Core Lens Formulae</h4>
+                <p><strong>Lens Equation:</strong></p>
+                $$\frac{1}{f} = \frac{1}{v} - \frac{1}{u}$$
+                <p><strong>Linear Magnification:</strong></p>
+                $$m = \frac{h_i}{h_o} = \frac{v}{u}$$
+                <p><strong>Lens Power:</strong></p>
+                $$P = \frac{1}{f\text{ (meters)}} \quad [\text{Diopters, D}]$$
+            </div>
+            
+            <div class="card">
+                <h4>Real vs. Virtual Image Comparison</h4>
+                <ul>
+                    <li><strong>Real Images:</strong> Formed by actual intersecting rays. Can be projected onto a physical screen. Always inverted. $m < 0$.</li>
+                    <li><strong>Virtual Images:</strong> Formed where rays only appear to originate. Cannot be projected onto a screen. Always erect. $m > 0$.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h4>Simple Magnifying Glass Principle</h4>
+            <p>A simple magnifier consists of a single converging (convex) lens. When an object is placed within its focal length ($u < f$), it produces an erect, magnified, virtual image on the same side as the object, allowing the human eye to resolve fine detail.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 12 -->
+    <section id="defects" class="topic-section">
+        <h2 class="topic-title">12. Visible Spectrum & Human Vision Defects</h2>
+        
+        <h3 style="color:var(--accent-yellow); margin-bottom:10px;">The Visible Light Spectrum</h3>
+        <p>White light passing through a dispersive prism splits into its constituent colors (VIBGYOR: Violet $\approx 400\text{ nm}$ to Red $\approx 700\text{ nm}$) due to wavelength-dependent refraction ($n \propto 1/\lambda$). Violet bends the most; Red bends the least.</p>
+
+        <h3 style="color:var(--accent-yellow); margin-top:30px; margin-bottom:10px;">Human Vision Defects and Corrective Lenses</h3>
+        <div class="grid-2">
+            <div class="card">
+                <h4 style="color:var(--accent-red)">Myopia (Short-Sightedness)</h4>
+                <p><strong>Issue:</strong> Can see nearby objects clearly; distant objects are blurry.</p>
+                <p><strong>Cause:</strong> Eyeball is too long or lens curvature is excessive. Light focuses <em>in front</em> of the retina.</p>
+                <p><strong>Correction:</strong> Concave (Diverging) Lens.</p>
+            </div>
+            <div class="card">
+                <h4 style="color:var(--accent-green)">Hypermetropia (Long-Sightedness)</h4>
+                <p><strong>Issue:</strong> Can see distant objects clearly; nearby objects are blurry.</p>
+                <p><strong>Cause:</strong> Eyeball is too short or focal length is too long. Light focuses <em>behind</em> the retina.</p>
+                <p><strong>Correction:</strong> Convex (Converging) Lens.</p>
+            </div>
+        </div>
+
+        <div class="interactive-box">
+            <canvas id="canvasEye" width="600" height="250"></canvas>
+            <div class="controls">
+                <button id="btnEyeNormal">Normal Eye</button>
+                <button id="btnEyeMyopia">Myopic Eye</button>
+                <button id="btnEyeMyopiaCorrect">Correct Myopia</button>
+                <button id="btnEyeHyper">Hypermetropic Eye</button>
+                <button id="btnEyeHyperCorrect">Correct Hypermetropia</button>
+                <div class="readout" id="readoutEye">
+                    Status: Normal Healthy Vision (Focus directly on Retina)
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+// --- CANVAS UTILITIES ---
+function clearCanvas(canvas, ctx) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// --- 1. REFLECTION CANVAS ANIMATION ---
+const canvasRef = document.getElementById('canvasReflection');
+const ctxRef = canvasRef.getContext('2d');
+const sliderInc = document.getElementById('sliderIncidence');
+const valInc = document.getElementById('valIncidence');
+const readoutRef = document.getElementById('readoutReflection');
+
+function drawReflection() {
+    clearCanvas(canvasRef, ctxRef);
+    const w = canvasRef.width;
+    const h = canvasRef.height;
+    const cx = w / 2;
+    const cy = h - 50;
+    const angleDeg = parseFloat(sliderInc.value);
+    valInc.innerText = angleDeg;
+    readoutRef.innerHTML = `Angle of Incidence ($\theta_i$): ${angleDeg}°<br>Angle of Reflection ($\theta_r$): ${angleDeg}°`;
+
+    // Surface
+    ctxRef.strokeStyle = '#94a3b8';
+    ctxRef.lineWidth = 4;
+    ctxRef.beginPath();
+    ctxRef.moveTo(50, cy);
+    ctxRef.lineTo(w - 50, cy);
+    ctxRef.stroke();
+
+    // Mirror Hatching
+    ctxRef.strokeStyle = '#475569';
+    ctxRef.lineWidth = 1;
+    for(let x = 50; x <= w - 50; x += 15) {
+        ctxRef.beginPath();
+        ctxRef.moveTo(x, cy);
+        ctxRef.lineTo(x - 10, cy + 15);
+        ctxRef.stroke();
+    }
+
+    // Normal Line
+    ctxRef.strokeStyle = '#facc15';
+    ctxRef.setLineDash([5, 5]);
+    ctxRef.beginPath();
+    ctxRef.moveTo(cx, cy);
+    ctxRef.lineTo(cx, 40);
+    ctxRef.stroke();
+    ctxRef.setLineDash([]);
+
+    const rad = angleDeg * Math.PI / 180;
+    const rayLen = 220;
+
+    // Incident Ray
+    const ix = cx - rayLen * Math.sin(rad);
+    const iy = cy - rayLen * Math.cos(rad);
+    ctxRef.strokeStyle = '#38bdf8';
+    ctxRef.lineWidth = 3;
+    ctxRef.beginPath();
+    ctxRef.moveTo(ix, iy);
+    ctxRef.lineTo(cx, cy);
+    ctxRef.stroke();
+
+    // Reflected Ray
+    const rx = cx + rayLen * Math.sin(rad);
+    const ry = cy - rayLen * Math.cos(rad);
+    ctxRef.strokeStyle = '#4ade80';
+    ctxRef.beginPath();
+    ctxRef.moveTo(cx, cy);
+    ctxRef.lineTo(rx, ry);
+    ctxRef.stroke();
+
+    // Arc indicators
+    ctxRef.strokeStyle = '#f87171';
+    ctxRef.lineWidth = 1.5;
+    ctxRef.beginPath();
+    ctxRef.arc(cx, cy, 40, -Math.PI/2 - rad, -Math.PI/2);
+    ctxRef.stroke();
+    
+    ctxRef.strokeStyle = '#c084fc';
+    ctxRef.beginPath();
+    ctxRef.arc(cx, cy, 40, -Math.PI/2, -Math.PI/2 + rad);
+    ctxRef.stroke();
+    
+    if (window.renderMathInElement) renderMathInElement(readoutRef);
+}
+sliderInc.addEventListener('input', drawReflection);
+drawReflection();
+
+// --- 2. SPECULAR VS DIFFUSED CANVAS ---
+const canvasSpec = document.getElementById('canvasSpecularDiffused');
+const ctxSpec = canvasSpec.getContext('2d');
+const btnSurface = document.getElementById('btnToggleSurface');
+const readoutSurf = document.getElementById('readoutSurface');
+let isDiffused = false;
+
+btnSurface.addEventListener('click', () => {
+    isDiffused = !isDiffused;
+    readoutSurf.innerText = isDiffused ? "Current Mode: Diffused (Irregular Rough) Surface" : "Current Mode: Regular (Specular Smooth) Surface";
+    drawSpecularDiffused();
+});
+
+function drawSpecularDiffused() {
+    clearCanvas(canvasSpec, ctxSpec);
+    const w = canvasSpec.width;
+    const h = canvasSpec.height;
+    const cy = h - 60;
+
+    // Surface
+    ctxSpec.strokeStyle = '#94a3b8';
+    ctxSpec.lineWidth = 3;
+    ctxSpec.beginPath();
+    if (!isDiffused) {
+        ctxSpec.moveTo(40, cy);
+        ctxSpec.lineTo(w - 40, cy);
+    } else {
+        ctxSpec.moveTo(40, cy);
+        for(let x = 40; x <= w - 40; x += 20) {
+            ctxSpec.lineTo(x + 10, cy + (Math.random() * 16 - 8));
+        }
+    }
+    ctxSpec.stroke();
+
+    // Incident Rays (Parallel)
+    const rayCount = 5;
+    for(let i = 0; i < rayCount; i++) {
+        const x = 100 + i * 80;
+        ctxSpec.strokeStyle = '#38bdf8';
+        ctxSpec.lineWidth = 2;
+        ctxSpec.beginPath();
+        ctxSpec.moveTo(x - 50, 40);
+        ctxSpec.lineTo(x, cy);
+        ctxSpec.stroke();
+
+        // Reflected Rays
+        ctxSpec.strokeStyle = '#f87171';
+        ctxSpec.beginPath();
+        ctxSpec.moveTo(x, cy);
+        if(!isDiffused) {
+            ctxSpec.lineTo(x + 50, 40);
+        } else {
+            const randomAngle = (30 + Math.random() * 120) * Math.PI / 180;
+            ctxSpec.lineTo(x + 100 * Math.cos(randomAngle), cy - 100 * Math.sin(randomAngle));
+        }
+        ctxSpec.stroke();
+    }
+}
+drawSpecularDiffused();
+
+// --- 3 & 4. REFRACTION & SNELL'S LAW ---
+const canvasRefract = document.getElementById('canvasRefraction');
+const ctxRefract = canvasRefract.getContext('2d');
+const sliderRefractAngle = document.getElementById('sliderRefractAngle');
+const sliderN1 = document.getElementById('sliderN1');
+const sliderN2 = document.getElementById('sliderN2');
+
+function drawRefraction() {
+    clearCanvas(canvasRefract, ctxRefract);
+    const w = canvasRefract.width;
+    const h = canvasRefract.height;
+    const cy = h / 2;
+    const cx = w / 2;
+
+    const θ1_deg = parseFloat(sliderRefractAngle.value);
+    const n1 = parseFloat(sliderN1.value);
+    const n2 = parseFloat(sliderN2.value);
+
+    document.getElementById('valRefractAngle').innerText = θ1_deg;
+    document.getElementById('valN1').innerText = n1.toFixed(2);
+    document.getElementById('valN2').innerText = n2.toFixed(2);
+
+    // Medium fill
+    ctxRefract.fillStyle = 'rgba(56, 189, 248, 0.05)';
+    ctxRefract.fillRect(0, 0, w, cy);
+    ctxRefract.fillStyle = 'rgba(56, 189, 248, 0.2)';
+    ctxRefract.fillRect(0, cy, w, cy);
+
+    // Boundary & Normal
+    ctxRefract.strokeStyle = '#94a3b8';
+    ctxRefract.lineWidth = 2;
+    ctxRefract.beginPath();
+    ctxRefract.moveTo(0, cy);
+    ctxRefract.lineTo(w, cy);
+    ctxRefract.stroke();
+
+    ctxRefract.strokeStyle = '#facc15';
+    ctxRefract.setLineDash([4, 4]);
+    ctxRefract.beginPath();
+    ctxRefract.moveTo(cx, 20);
+    ctxRefract.lineTo(cx, h - 20);
+    ctxRefract.stroke();
+    ctxRefract.setLineDash([]);
+
+    const θ1 = θ1_deg * Math.PI / 180;
+    const sinθ2 = (n1 * Math.sin(θ1)) / n2;
+
+    const rayLen = 160;
+    // Incident Ray
+    ctxRefract.strokeStyle = '#38bdf8';
+    ctxRefract.lineWidth = 3;
+    ctxRefract.beginPath();
+    ctxRefract.moveTo(cx - rayLen * Math.sin(θ1), cy - rayLen * Math.cos(θ1));
+    ctxRefract.lineTo(cx, cy);
+    ctxRefract.stroke();
+
+    const readout = document.getElementById('readoutRefraction');
+    if (sinθ2 <= 1.0) {
+        const θ2 = Math.asin(sinθ2);
+        const θ2_deg = (θ2 * 180 / Math.PI).toFixed(1);
+        readout.innerHTML = `Refracted Angle ($\theta_2$): ${θ2_deg}°<br>Speed ratio ($v_1/v_2$): ${(n2/n1).toFixed(2)}`;
+
+        // Refracted Ray
+        ctxRefract.strokeStyle = '#4ade80';
+        ctxRefract.beginPath();
+        ctxRefract.moveTo(cx, cy);
+        ctxRefract.lineTo(cx + rayLen * Math.sin(θ2), cy + rayLen * Math.cos(θ2));
+        ctxRefract.stroke();
+    } else {
+        readout.innerHTML = `Total Internal Reflection Occurs! (No refraction)`;
+    }
+    if (window.renderMathInElement) renderMathInElement(readout);
+}
+[sliderRefractAngle, sliderN1, sliderN2].forEach(s => s.addEventListener('input', drawRefraction));
+drawRefraction();
+
+// --- 5. GLASS SLAB EXPERIMENT ---
+const canvasSlab = document.getElementById('canvasSlab');
+const ctxSlab = canvasSlab.getContext('2d');
+const sliderSlabAngle = document.getElementById('sliderSlabAngle');
+const sliderSlabThickness = document.getElementById('sliderSlabThickness');
+
+function drawSlab() {
+    clearCanvas(canvasSlab, ctxSlab);
+    const w = canvasSlab.width;
+    const h = canvasSlab.height;
+    const cy = h / 2;
+    const cx = w / 3;
+
+    const θi_deg = parseFloat(sliderSlabAngle.value);
+    const t = parseFloat(sliderSlabThickness.value);
+    document.getElementById('valSlabAngle').innerText = θi_deg;
+    document.getElementById('valSlabThickness').innerText = t;
+
+    const topY = cy - t / 2;
+    const botY = cy + t / 2;
+
+    // Glass Slab
+    ctxSlab.fillStyle = 'rgba(148, 163, 184, 0.15)';
+    ctxSlab.strokeStyle = '#38bdf8';
+    ctxSlab.lineWidth = 2;
+    ctxSlab.fillRect(60, topY, w - 120, t);
+    ctxSlab.strokeRect(60, topY, w - 120, t);
+
+    const nAir = 1.0;
+    const nGlass = 1.5;
+    const θi = θi_deg * Math.PI / 180;
+    const θr = Math.asin((nAir * Math.sin(θi)) / nGlass);
+
+    // Incident Point
+    const x1 = cx;
+    const y1 = topY;
+
+    // Ray 1: Air to Glass
+    ctxSlab.strokeStyle = '#38bdf8';
+    ctxSlab.lineWidth = 3;
+    ctxSlab.beginPath();
+    ctxSlab.moveTo(x1 - 120 * Math.sin(θi), y1 - 120 * Math.cos(θi));
+    ctxSlab.lineTo(x1, y1);
+    ctxSlab.stroke();
+
+    // Ray 2: Refracted inside Glass
+    const dx = t * Math.tan(θr);
+    const x2 = x1 + dx;
+    const y2 = botY;
+
+    ctxSlab.strokeStyle = '#facc15';
+    ctxSlab.beginPath();
+    ctxSlab.moveTo(x1, y1);
+    ctxSlab.lineTo(x2, y2);
+    ctxSlab.stroke();
+
+    // Ray 3: Emergent Ray
+    ctxSlab.strokeStyle = '#4ade80';
+    ctxSlab.beginPath();
+    ctxSlab.moveTo(x2, y2);
+    ctxSlab.lineTo(x2 + 120 * Math.sin(θi), y2 + 120 * Math.cos(θi));
+    ctxSlab.stroke();
+
+    // Original undeviated line
+    ctxSlab.strokeStyle = '#f87171';
+    ctxSlab.setLineDash([4, 4]);
+    ctxSlab.lineWidth = 1.5;
+    ctxSlab.beginPath();
+    ctxSlab.moveTo(x1, y1);
+    ctxSlab.lineTo(x1 + (t + 80) * Math.sin(θi), y1 + (t + 80) * Math.cos(θi));
+    ctxSlab.stroke();
+    ctxSlab.setLineDash([]);
+
+    // Lateral displacement formula
+    const d = (t * Math.sin(θi - θr) / Math.cos(θr)).toFixed(1);
+    document.getElementById('readoutSlab').innerHTML = `Lateral Shift Distance ($d$): ${d} px<br>Emergent Angle ($\theta_e$): ${θi_deg}°`;
+    if (window.renderMathInElement) renderMathInElement(document.getElementById('readoutSlab'));
+}
+[sliderSlabAngle, sliderSlabThickness].forEach(s => s.addEventListener('input', drawSlab));
+drawSlab();
+
+// --- 6 & 7. TIR & OPTICAL FIBER ---
+const canvasTIR = document.getElementById('canvasTIR');
+const ctxTIR = canvasTIR.getContext('2d');
+const sliderTIRAngle = document.getElementById('sliderTIRAngle');
+
+function drawTIR() {
+    clearCanvas(canvasTIR, ctxTIR);
+    const w = canvasTIR.width;
+    const h = canvasTIR.height;
+    const cy = h / 2;
+    const cx = w / 2;
+
+    const n1 = 1.5; // Denser glass
+    const n2 = 1.0; // Rarer air
+    const θc_rad = Math.asin(n2 / n1);
+    const θc_deg = (θc_rad * 180 / Math.PI).toFixed(1);
+
+    const θi_deg = parseFloat(sliderTIRAngle.value);
+    document.getElementById('valTIRAngle').innerText = θi_deg;
+
+    // Denser Medium
+    ctxTIR.fillStyle = 'rgba(56, 189, 248, 0.2)';
+    ctxTIR.fillRect(0, cy, w, cy);
+
+    // Interface
+    ctxTIR.strokeStyle = '#94a3b8';
+    ctxTIR.lineWidth = 2;
+    ctxTIR.beginPath();
+    ctxTIR.moveTo(0, cy);
+    ctxTIR.lineTo(w, cy);
+    ctxTIR.stroke();
+
+    const θi = θi_deg * Math.PI / 180;
+    const rayLen = 140;
+
+    // Incident Ray
+    ctxTIR.strokeStyle = '#38bdf8';
+    ctxTIR.lineWidth = 3;
+    ctxTIR.beginPath();
+    ctxTIR.moveTo(cx - rayLen * Math.sin(θi), cy + rayLen * Math.cos(θi));
+    ctxTIR.lineTo(cx, cy);
+    ctxTIR.stroke();
+
+    const readout = document.getElementById('readoutTIR');
+    if (θi_deg < θc_deg) {
+        const θr = Math.asin((n1 * Math.sin(θi)) / n2);
+        ctxTIR.strokeStyle = '#4ade80';
+        ctxTIR.beginPath();
+        ctxTIR.moveTo(cx, cy);
+        ctxTIR.lineTo(cx + rayLen * Math.sin(θr), cy - rayLen * Math.cos(θr));
+        ctxTIR.stroke();
+        readout.innerHTML = `Critical Angle ($\theta_c$): ${θc_deg}°<br>State: Standard Refraction into Air`;
+    } else if (Math.abs(θi_deg - θc_deg) < 1.0) {
+        ctxTIR.strokeStyle = '#facc15';
+        ctxTIR.beginPath();
+        ctxTIR.moveTo(cx, cy);
+        ctxTIR.lineTo(cx + rayLen, cy);
+        ctxTIR.stroke();
+        readout.innerHTML = `Critical Angle ($\theta_c$): ${θc_deg}°<br>State: Grazing Refraction ($\theta_r = 90^\circ$)`;
+    } else {
+        ctxTIR.strokeStyle = '#f87171';
+        ctxTIR.beginPath();
+        ctxTIR.moveTo(cx, cy);
+        ctxTIR.lineTo(cx + rayLen * Math.sin(θi), cy + rayLen * Math.cos(θi));
+        ctxTIR.stroke();
+        readout.innerHTML = `Critical Angle ($\theta_c$): ${θc_deg}°<br>State: <strong>TOTAL INTERNAL REFLECTION!</strong>`;
+    }
+    if (window.renderMathInElement) renderMathInElement(readout);
+}
+sliderTIRAngle.addEventListener('input', drawTIR);
+drawTIR();
+
+// Optical Fiber Dynamic Canvas
+const canvasFiber = document.getElementById('canvasFiber');
+const ctxFiber = canvasFiber.getContext('2d');
+
+function drawFiber() {
+    clearCanvas(canvasFiber, ctxFiber);
+    const w = canvasFiber.width;
+    const h = canvasFiber.height;
+    const cy = h / 2;
+    const coreH = 70;
+
+    // Cladding
+    ctxFiber.fillStyle = 'rgba(148, 163, 184, 0.1)';
+    ctxFiber.fillRect(0, cy - coreH, w, coreH * 2);
+
+    // Core
+    ctxFiber.fillStyle = 'rgba(56, 189, 248, 0.25)';
+    ctxFiber.fillRect(0, cy - coreH/2, w, coreH);
+    ctxFiber.strokeStyle = '#38bdf8';
+    ctxFiber.strokeRect(0, cy - coreH/2, w, coreH);
+
+    // TIR Light Path
+    ctxFiber.strokeStyle = '#facc15';
+    ctxFiber.lineWidth = 3;
+    ctxFiber.beginPath();
+    let x = 0;
+    let y = cy;
+    let targetY = cy - coreH/2;
+    ctxFiber.moveTo(x, y);
+
+    const stepX = 70;
+    while(x < w) {
+        x += stepX;
+        ctxFiber.lineTo(x, targetY);
+        targetY = (targetY === cy - coreH/2) ? cy + coreH/2 : cy - coreH/2;
+    }
+    ctxFiber.stroke();
+}
+drawFiber();
+
+// --- 8 & 9. THIN LENSES DYNAMIC RAY TRACING ---
+const canvasLens = document.getElementById('canvasLens');
+const ctxLens = canvasLens.getContext('2d');
+const sliderObjDist = document.getElementById('sliderObjDist');
+const sliderFocal = document.getElementById('sliderFocal');
+
+function drawLens() {
+    clearCanvas(canvasLens, ctxLens);
+    const w = canvasLens.width;
+    const h = canvasLens.height;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    const u = parseFloat(sliderObjDist.value); // negative
+    const f = parseFloat(sliderFocal.value);   // positive
+    const objH = 50;
+
+    document.getElementById('valObjDist').innerText = u;
+    document.getElementById('valFocal').innerText = f;
+
+    // Principal Axis
+    ctxLens.strokeStyle = '#64748b';
+    ctxLens.lineWidth = 1.5;
+    ctxLens.beginPath();
+    ctxLens.moveTo(20, cy);
+    ctxLens.lineTo(w - 20, cy);
+    ctxLens.stroke();
+
+    // Lens Shape (Convex)
+    ctxLens.strokeStyle = '#38bdf8';
+    ctxLens.lineWidth = 3;
+    ctxLens.fillStyle = 'rgba(56, 189, 248, 0.15)';
+    ctxLens.beginPath();
+    ctxLens.ellipse(cx, cy, 12, 120, 0, 0, 2 * Math.PI);
+    ctxLens.fill();
+    ctxLens.stroke();
+
+    // Focal Points
+    const points = [
+        { name: 'F1', x: cx + u < cx ? cx - f : cx - f },
+        { name: '2F1', x: cx - 2 * f },
+        { name: 'F2', x: cx + f },
+        { name: '2F2', x: cx + 2 * f }
+    ];
+
+    ctxLens.fillStyle = '#facc15';
+    ctxLens.font = '12px sans-serif';
+    points.forEach(p => {
+        ctxLens.beginPath();
+        ctxLens.arc(p.x, cy, 4, 0, 2 * Math.PI);
+        ctxLens.fill();
+        ctxLens.fillText(p.name, p.x - 10, cy + 20);
+    });
+
+    // Object Arrow
+    const objX = cx + u;
+    ctxLens.strokeStyle = '#4ade80';
+    ctxLens.lineWidth = 4;
+    ctxLens.beginPath();
+    ctxLens.moveTo(objX, cy);
+    ctxLens.lineTo(objX, cy - objH);
+    ctxLens.stroke();
+
+    // Lens equation: 1/f = 1/v - 1/u => 1/v = 1/f + 1/u
+    const invV = (1 / f) + (1 / u);
+    const readout = document.getElementById('readoutLens');
+
+    if (Math.abs(invV) < 0.0001) {
+        // At Focus
+        readout.innerHTML = `Image Distance ($v$): Infinity<br>Magnification ($m$): Infinite<br>Nature: Real, Inverted, At Infinity`;
+    } else {
+        const v = 1 / invV;
+        const m = v / u;
+        const imgH = m * objH;
+        const imgX = cx + v;
+
+        readout.innerHTML = `Image Distance ($v$): ${v.toFixed(1)} mm<br>Magnification ($m$): ${m.toFixed(2)}<br>Nature: ${v > 0 ? 'Real & Inverted' : 'Virtual & Erect'}`;
+
+        // Image Arrow
+        ctxLens.strokeStyle = v > 0 ? '#f87171' : '#c084fc';
+        ctxLens.beginPath();
+        ctxLens.moveTo(imgX, cy);
+        ctxLens.lineTo(imgX, cy - imgH);
+        ctxLens.stroke();
+
+        // Rays
+        // Ray 1: Parallel then through F2
+        ctxLens.strokeStyle = '#38bdf8';
+        ctxLens.lineWidth = 1.5;
+        ctxLens.beginPath();
+        ctxLens.moveTo(objX, cy - objH);
+        ctxLens.lineTo(cx, cy - objH);
+        ctxLens.lineTo(imgX, cy - imgH);
+        ctxLens.stroke();
+
+        // Ray 2: Through Optical Center
+        ctxLens.strokeStyle = '#facc15';
+        ctxLens.beginPath();
+        ctxLens.moveTo(objX, cy - objH);
+        ctxLens.lineTo(imgX, cy - imgH);
+        ctxLens.stroke();
+    }
+    if (window.renderMathInElement) renderMathInElement(readout);
+}
+[sliderObjDist, sliderFocal].forEach(s => s.addEventListener('input', drawLens));
+drawLens();
+
+// --- 12. EYE VISION DEFECTS ANIMATION ---
+const canvasEye = document.getElementById('canvasEye');
+const ctxEye = canvasEye.getContext('2d');
+const readoutEye = document.getElementById('readoutEye');
+
+let eyeState = 'normal';
+
+document.getElementById('btnEyeNormal').onclick = () => { eyeState = 'normal'; drawEye(); };
+document.getElementById('btnEyeMyopia').onclick = () => { eyeState = 'myopia'; drawEye(); };
+document.getElementById('btnEyeMyopiaCorrect').onclick = () => { eyeState = 'myopia-correct'; drawEye(); };
+document.getElementById('btnEyeHyper').onclick = () => { eyeState = 'hyper'; drawEye(); };
+document.getElementById('btnEyeHyperCorrect').onclick = () => { eyeState = 'hyper-correct'; drawEye(); };
+
+function drawEye() {
+    clearCanvas(canvasEye, ctxEye);
+    const w = canvasEye.width;
+    const h = canvasEye.height;
+    const cx = w / 2 + 50;
+    const cy = h / 2;
+
+    // Eyeball
+    ctxEye.strokeStyle = '#94a3b8';
+    ctxEye.lineWidth = 3;
+    ctxEye.beginPath();
+    ctxEye.arc(cx, cy, 80, 0, 2 * Math.PI);
+    ctxEye.stroke();
+
+    // Retina line
+    ctxEye.strokeStyle = '#f87171';
+    ctxEye.lineWidth = 4;
+    ctxEye.beginPath();
+    ctxEye.arc(cx, cy, 80, -Math.PI/3, Math.PI/3);
+    ctxEye.stroke();
+
+    // Eye Lens
+    ctxEye.fillStyle = 'rgba(56, 189, 248, 0.3)';
+    ctxEye.beginPath();
+    ctxEye.ellipse(cx - 70, cy, 8, 30, 0, 0, 2 * Math.PI);
+    ctxEye.fill();
+
+    // Focus Point calculation based on defect
+    let focusX = cx + 80; // Retina
+    if (eyeState === 'myopia') focusX = cx + 30; // In front
+    if (eyeState === 'hyper') focusX = cx + 120; // Behind
+
+    // Corrective Lens Drawing
+    if (eyeState === 'myopia-correct') {
+        ctxEye.strokeStyle = '#c084fc';
+        ctxEye.lineWidth = 3;
+        ctxEye.strokeRect(cx - 130, cy - 35, 6, 70);
+    } else if (eyeState === 'hyper-correct') {
+        ctxEye.strokeStyle = '#4ade80';
+        ctxEye.lineWidth = 3;
+        ctxEye.beginPath();
+        ctxEye.ellipse(cx - 130, cy, 6, 35, 0, 0, 2 * Math.PI);
+        ctxEye.stroke();
+    }
+
+    // Incident Light Rays
+    ctxEye.strokeStyle = '#facc15';
+    ctxEye.lineWidth = 2;
+    [-20, 20].forEach(offset => {
+        ctxEye.beginPath();
+        ctxEye.moveTo(40, cy + offset);
+        ctxEye.lineTo(cx - 70, cy + offset);
+        ctxEye.lineTo(focusX, cy);
+        ctxEye.stroke();
+    });
+
+    // Update Status Readout
+    const statuses = {
+        'normal': 'Status: Normal Healthy Vision (Focus lands directly on Retina)',
+        'myopia': 'Status: Myopia / Short-Sightedness (Focus falls IN FRONT of Retina)',
+        'myopia-correct': 'Status: Myopia Corrected using Diverging Concave Lens',
+        'hyper': 'Status: Hypermetropia / Long-Sightedness (Focus falls BEHIND Retina)',
+        'hyper-correct': 'Status: Hypermetropia Corrected using Converging Convex Lens'
+    };
+    readoutEye.innerText = statuses[eyeState];
+}
+drawEye();
+</script>
+</body>
+</html>
